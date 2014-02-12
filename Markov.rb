@@ -9,7 +9,7 @@ class Markov
 		#weights is an array of weights, will return 
 		def @@rand.weighted(weights,values=nil)
 			totals = []
-			running_total = weights.each.with_index.inject{|s,(e,i)| totals.push([s+e,i]); s+e}			
+			running_total = weights.each.with_index.inject(0){|s,(e,i)| totals.push([s+e,i]); s+e}
 			
 			r = self.rand(running_total)
 			#this is dumb but it works
@@ -26,12 +26,13 @@ class Markov
 		if !@hash[phr1]
 			@hash[phr1] = Hash.new(0)
 		end
-		@hash[phr1][phr2]++
+		@hash[phr1][phr2] += 1
 	end
 	
 	# Returns a weighted random "next" phrase given a source phrase
 	def rand_next(phr)
-		
+		return @@rand.weighted(@hash[phr].values, @hash[phr].keys)
 	end
 	
 end
+		
